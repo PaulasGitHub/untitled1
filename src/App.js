@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+import NavBar from "./components/NavBar";
+import Contacts from "./components/Contacts";
+import AddContact from "./components/AddContact";
+import LogIn from "./components/LogIn";
+import EditContact from "./components/EditContact";
+import {useState} from "react";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [editContact, setEditContact] = useState(null)
+
+    return (
+        <Router>
+            <NavBar />
+
+            <Route path='/contacts'>
+                <Contacts setEditContact={setEditContact}/>
+            </Route>
+
+            <Route path='/addContact'>
+               <AddContact />
+            </Route>
+
+            <Route path='/logIn'>
+                <LogIn />
+            </Route>
+
+            <Route path='/editContact'>
+                <EditContact editContact={editContact}/>
+            </Route>
+
+
+
+        </Router>
+
+    )
 }
 
 export default App;
