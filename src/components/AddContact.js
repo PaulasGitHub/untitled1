@@ -3,6 +3,7 @@ import axios from "axios";
 import './Styling.css';
 import {Link} from 'react-router-dom';
 import {Dropdown, Menu} from 'semantic-ui-react'
+import Select from "react-select/base";
 
 
 function AddContact() {
@@ -21,15 +22,13 @@ function AddContact() {
 
     const ownerOptions = [
         {
-            key: 'admina',
-            text: 'admina',
-            value: 'admina'
+            label: "admina",
+            value: 1
         },
 
         {
-            key: 'normalo',
-            text: 'normalo',
-            value: 'normalo'
+            label: "normalo",
+            value: 2
         }
     ]
 
@@ -66,7 +65,7 @@ function AddContact() {
             privat: input.privat,
             owner: input.owner
         }
-        axios.post("http://localhost:3001/addContact", newContact)
+       axios.post("http://localhost:3001/addContact", newContact)
 
 
     }
@@ -81,7 +80,6 @@ function AddContact() {
                     color='teal'
                 >Back
                 </button>
-
             </Link>
 
             <form className='add-contact'>
@@ -92,7 +90,7 @@ function AddContact() {
                         name='firstName'
                         value={input.firstName}
                         placeholder='First Name'
-                        autoComplete='off'></input>
+                    ></input>
                 </div>
 
                 <div className='form-control'>
@@ -102,7 +100,6 @@ function AddContact() {
                         name='lastName'
                         value={input.lastName}
                         placeholder='Last Name'
-                        autoComplete='off'
                     ></input>
                 </div>
 
@@ -113,7 +110,6 @@ function AddContact() {
                         name='street'
                         value={input.street}
                         placeholder='Street'
-                        autoComplete='off'
                     ></input>
                 </div>
 
@@ -124,7 +120,6 @@ function AddContact() {
                         name='streetnumber'
                         value={input.streetnumber}
                         placeholder='Number'
-                        autoComplete='off'
                     ></input>
                 </div>
 
@@ -135,7 +130,6 @@ function AddContact() {
                         name='zip'
                         value={input.zip}
                         placeholder='ZIP'
-                        autoComplete='off'
                     ></input>
                 </div>
 
@@ -146,7 +140,6 @@ function AddContact() {
                         name='city'
                         value={input.city}
                         placeholder='City'
-                        autoComplete='off'
                     ></input>
                 </div>
 
@@ -157,7 +150,6 @@ function AddContact() {
                         name='state'
                         value={input.state}
                         placeholder='State'
-                        autoComplete='off'
                     ></input>
                 </div>
 
@@ -168,7 +160,6 @@ function AddContact() {
                         name='country'
                         value={input.country}
                         placeholder='Country'
-                        autoComplete='off'
                     ></input>
                 </div>
 
@@ -182,27 +173,20 @@ function AddContact() {
                         value={input.privat}
                     ></input>
                 </div>
-
                 <div className='form-control'>
                     <label>Owner</label>
                     <input
                         onChange={handleChange}
                         name='owner'
                         value={input.owner}
-                        placeholder='Country'
-                        autoComplete='off'
+                        placeholder='admina or normalo'
                     ></input>
                 </div>
-
 
                 <button onClick={handleClick} className='btn btn-lg btn-info'>Add Contact</button>
             </form>
 
-
         </div>
-
     )
-
 }
-
 export default AddContact

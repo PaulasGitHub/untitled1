@@ -5,7 +5,6 @@ import {FaEdit} from 'react-icons/fa'
 import {Link} from "react-router-dom";
 import Geocode from "react-geocode";
 
-
 const containerStyle = {
     width: '400px',
     height: '400px'
@@ -18,6 +17,15 @@ const center = {
 const position = {
     lat: 52.522331,
     lng: 13.412740
+}
+
+
+function filterNormalo(){
+    console.log('normalos contacts')
+}
+
+function filterAdmina(){
+    console.log('adminas contacts')
 }
 
 function Contacts({setEditContact}) {
@@ -88,9 +96,29 @@ function Contacts({setEditContact}) {
                     <p>{contact.street} {contact.streetnumber}</p>
                     <p>{contact.zip} {contact.city}</p>
                     <p>{contact.state} {contact.country}</p>
-
                 </div>
             )}
+            <button onClick={filterNormalo} className='btn btn-sm btn-info'>Normalo's Contacts</button>
+            <button onClick={filterAdmina} className='btn btn-sm btn-info'>Admina's Contacts</button>
+
+            <div>
+                {contacts.filter(contact => contact.owner.includes('admina')).map(filteredContact => (
+
+                    <div>
+                        <h4>{filteredContact.firstName} {filteredContact.lastName} {}
+                            <Link to='/editContact'  onClick ={() => setEditContact(filteredContact)} >
+                                <FaEdit
+                                    style={{color: 'black', cursor: 'pointer'}}
+                                />
+                            </Link>
+                        </h4>
+
+
+                    </div>
+
+                ))}
+            </div>
+
         </div>
     )
 }
