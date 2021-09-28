@@ -20,12 +20,12 @@ const position = {
 }
 
 
-function filterNormalo(){
-    console.log('normalos contacts')
+function filterMyContacts(){
+    console.log('private contacts')
 }
 
-function filterAdmina(){
-    console.log('adminas contacts')
+function filterAllContacts(){
+    console.log('all contacts')
 }
 
 function Contacts({setEditContact}) {
@@ -98,10 +98,10 @@ function Contacts({setEditContact}) {
                     <p>{contact.state} {contact.country}</p>
                 </div>
             )}
-            <button onClick={filterNormalo} className='btn btn-sm btn-info'>Normalo's Contacts</button>
-            <button onClick={filterAdmina} className='btn btn-sm btn-info'>Admina's Contacts</button>
+            <button onClick={filterMyContacts} className='btn btn-sm btn-info'>My Contacts</button>
+            <button onClick={filterAllContacts} className='btn btn-sm btn-info'>All Contacts</button>
 
-            <div>
+{/*            <div>
                 {contacts.filter(contact => contact.owner.includes('admina')).map(filteredContact => (
 
                     <div>
@@ -112,12 +112,9 @@ function Contacts({setEditContact}) {
                                 />
                             </Link>
                         </h4>
-
-
                     </div>
-
                 ))}
-            </div>
+            </div>*/}
 
         </div>
     )
