@@ -1,4 +1,4 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import './Styling.css';
 import {Link} from 'react-router-dom';
@@ -6,19 +6,17 @@ import {Dropdown, Menu} from 'semantic-ui-react'
 import Select from "react-select/base";
 
 
-function AddContact() {
-    const [input, setInput] = useState({
-        firstName: '',
-        lastName: '',
-        street: '',
-        streetnumber: '',
-        zip: '',
-        city: '',
-        state: '',
-        country: '',
-        privat: false,
-        owner: ''
-    })
+function AddContact({loggedIn}) {
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [street, setStreet] = useState('')
+    const [streetnumber, setStreetnumber] = useState('')
+    const [zip, setZip] = useState('')
+    const [city, setCity] = useState('')
+    const [state, setState] = useState('')
+    const [country, setCountry] = useState('')
+    const [privat, setPrivat] = useState(false)
+    const [owner, setOwner] = useState('')
 
     const ownerOptions = [
         {
@@ -32,47 +30,41 @@ function AddContact() {
         }
     ]
 
-    function handleChange(event) {
-        const {name, value} = event.target
 
-        setInput(prevInput => {
-            return {
-                ...prevInput,
-                [name]: value
-            }
-        })
-    }
-
-    function handleClick(event) {
+    function AddContact(event) {
         event.preventDefault()
 
-        if (!input.firstName || !input.lastName || !input.street || !input.streetnumber ||
-            !input.zip || !input.city || !input.country) {
+        if (!firstName || !lastName || !street || !streetnumber ||
+            !zip || !city || !country) {
             alert('Please fill in all required fields. ' +
                 'All fields marked * are required.')
             return
         }
 
         const newContact = {
-            firstName: input.firstName,
-            lastName: input.lastName,
-            street: input.street,
-            streetnumber: input.streetnumber,
-            zip: input.zip,
-            city: input.city,
-            state: input.state,
-            country: input.country,
-            privat: input.privat,
-            owner: input.owner
+            firstName: firstName,
+            lastName: lastName,
+            street: street,
+            streetnumber: streetnumber,
+            zip: zip,
+            city: city,
+            state: state,
+            country: country,
+            privat: privat,
+            owner: owner
         }
-       axios.post("http://localhost:3001/addContact", newContact)
+       axios.post("http://localhost:3002/contacts", newContact)
 
 
     }
 
     return (
         <div className='container'>
-            <h1>Add Contact Page</h1>
+
+            {loggedIn ?
+                <div>
+
+            <h1>Add Contact </h1>
 
             <Link to='/contacts'>
                 <button
@@ -80,112 +72,143 @@ function AddContact() {
                     color='teal'
                 >Back
                 </button>
+
             </Link>
 
             <form className='add-contact'>
                 <div className='form-control'>
                     <label>First Name*</label>
                     <input
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setFirstName(e.target.value)
+                        }}
                         name='firstName'
-                        value={input.firstName}
+                        value={firstName}
                         placeholder='First Name'
-                    ></input>
+                        autoComplete='off'>
+                    </input>
                 </div>
 
                 <div className='form-control'>
                     <label>Last Name*</label>
                     <input
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setLastName(e.target.value)
+                        }}
                         name='lastName'
-                        value={input.lastName}
+                        value={lastName}
                         placeholder='Last Name'
+                        autoComplete='off'
                     ></input>
                 </div>
 
                 <div className='form-control'>
                     <label>Street*</label>
                     <input
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setStreet(e.target.value)
+                        }}
                         name='street'
-                        value={input.street}
+                        value={street}
                         placeholder='Street'
+                        autoComplete='off'
                     ></input>
                 </div>
 
                 <div className='form-control'>
                     <label>Number*</label>
                     <input
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setStreetnumber(e.target.value)
+                        }}
                         name='streetnumber'
-                        value={input.streetnumber}
+                        value={streetnumber}
                         placeholder='Number'
+                        autoComplete='off'
                     ></input>
                 </div>
 
                 <div className='form-control'>
                     <label>ZIP*</label>
                     <input
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setZip(e.target.value)
+                        }}
                         name='zip'
-                        value={input.zip}
+                        value={zip}
                         placeholder='ZIP'
+                        autoComplete='off'
                     ></input>
                 </div>
 
                 <div className='form-control'>
                     <label>City*</label>
                     <input
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setCity(e.target.value)
+                        }}
                         name='city'
-                        value={input.city}
+                        value={city}
                         placeholder='City'
+                        autoComplete='off'
                     ></input>
                 </div>
 
                 <div className='form-control'>
                     <label>State</label>
                     <input
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setState(e.target.value)
+                        }}
                         name='state'
-                        value={input.state}
+                        value={state}
                         placeholder='State'
+                        autoComplete='off'
                     ></input>
                 </div>
 
                 <div className='form-control'>
                     <label>Country*</label>
                     <input
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setCountry(e.target.value)
+                        }}
                         name='country'
-                        value={input.country}
+                        value={country}
                         placeholder='Country'
+                        autoComplete='off'
                     ></input>
                 </div>
 
                 <div className='form-control form-check'>
                     <label>Private</label>
                     <input
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setPrivat(e.target.value)
+                        }}
                         type='checkbox'
                         checked='privat'
                         name='privat'
-                        value={input.privat}
+                        value={privat}
                     ></input>
                 </div>
+
                 <div className='form-control'>
                     <label>Owner</label>
                     <input
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setOwner(e.target.value)
+                        }}
                         name='owner'
-                        value={input.owner}
-                        placeholder='admina or normalo'
+                        value={owner}
                     ></input>
                 </div>
-
-                <button onClick={handleClick} className='btn btn-lg btn-info'>Add Contact</button>
+                <button onClick={AddContact} className='btn btn-lg btn-info'>Add Contact</button>
             </form>
-
+                </div>
+                :
+                <h1> Sorry, you are not logged in</h1>
+            }
         </div>
     )
 }

@@ -9,25 +9,26 @@ import {useState} from "react";
 
 function App() {
     const [editContact, setEditContact] = useState(null)
+    const [loggedIn, setLoggedIn] = useState(false)
 
     return (
         <Router>
             <NavBar />
 
             <Route path='/contacts'>
-                <Contacts setEditContact={setEditContact}/>
+                <Contacts setEditContact={setEditContact} loggedIn = {loggedIn}/>
             </Route>
 
             <Route path='/addContact'>
-               <AddContact />
+               <AddContact loggedIn = {loggedIn}/>
             </Route>
 
             <Route path='/logIn'>
-                <LogIn />
+                <LogIn setLoggedIn = {setLoggedIn}/>
             </Route>
 
             <Route path='/editContact'>
-                <EditContact editContact={editContact}/>
+                <EditContact editContact={editContact} loggedIn = {loggedIn}/>
             </Route>
 
 

@@ -5,6 +5,8 @@ import {FaEdit} from 'react-icons/fa'
 import {Link} from "react-router-dom";
 import Geocode from "react-geocode";
 
+Geocode.setApiKey("AIzaSyAw-dW7unnfVPQJ0_xVGUC40cXxJPlrpuM");
+
 const containerStyle = {
     width: '400px',
     height: '400px'
@@ -20,15 +22,15 @@ const position = {
 }
 
 
-function filterMyContacts(){
-    console.log('private contacts')
+function filterMyContacts() {
+    console.log('my contacts')
 }
 
-function filterAllContacts(){
+function filterAllContacts() {
     console.log('all contacts')
 }
 
-function Contacts({setEditContact}) {
+function Contacts({setEditContact, loggedIn}) {
     const [contacts, setContacts] = useState([{
         firstName: '',
         lastName: '',
@@ -38,84 +40,83 @@ function Contacts({setEditContact}) {
         city: '',
         state: '',
         country: '',
-        privat: false,
+        privat: true,
         owner: ''
 
     }])
 
     useEffect(() => {
-        fetch('/contacts').then(res => {
+        fetch('http://localhost:3002/contacts').then(res => {
             if (res.ok) {
                 return res.json()
             }
-        }).then(jsonRes => setContacts(jsonRes))
-    })
+        })
+            .then(jsonRes => setContacts(jsonRes))
+            .then(getlatlong)
+    }, [])
 
-    /*    //Map
-        function Map() {
-            return (
-                <GoogleMap defaultZoom={10} defaultCenter={{lat: 52.520008, lng: 13.404954}}/>
-            )
-        }
+    const getlatlong = () => {
+        contacts.forEach((contact) => {
+            Geocode.fromAddress(contact.street + ' ' + contact.streetnumber + ' ' + contact.zip + ' ' + contact.city).then(
+                (response) => {
+                    const {lat, lng} = response.results[0].geometry.location;
+                    contact.lat = lat
+                    contact.lng = lng
+                    console.log(lat, lng);
+                },
+                (error) => {
+                    console.error(error);
+                }
+            );
+        })
+    }
 
-        const WrappedMap = withScriptjs(withGoogleMap(Map))*/
 
     return (
         <div className='container'>
-            {/* <div style={{width: "100vw", height: "100vh"}}>
-                <WrappedMap
-                    googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyAw-dW7unnfVPQJ0_xVGUC40cXxJPlrpuM`}
-                    loadingElement={<div style={{height: "100%"}}/>}
-                    containerElement={<div style={{height: "100%"}}/>}
-                    mapElement={<div style={{height: "100%"}}/>}
-                />
-            </div>*/}
 
-            <LoadScript
-                googleMapsApiKey="AIzaSyAw-dW7unnfVPQJ0_xVGUC40cXxJPlrpuM"
-            >
-                <GoogleMap
-                    mapContainerStyle={containerStyle}
-                    center={center}
-                    zoom={10}
-                >
-                    <Marker position={position}/>
-                </GoogleMap>
-            </LoadScript>
-
-            {contacts.map(contact =>
+            {loggedIn ?
                 <div>
-                    <h4>{contact.firstName} {contact.lastName} {}
-                        <Link to='/editContact'  onClick ={() => setEditContact(contact)} >
-                            <FaEdit
-                                style={{color: 'black', cursor: 'pointer'}}
-                                />
-                        </Link>
-                    </h4>
+                    <LoadScript
+                        googleMapsApiKey="AIzaSyAw-dW7unnfVPQJ0_xVGUC40cXxJPlrpuM"
+                    >
+                        <GoogleMap
+                            mapContainerStyle={containerStyle}
+                            center={center}
+                            zoom={10}
+                        >
+                            {contacts.map(contact =>
+                                <div>
+                                    <Marker
+                                        label={contact.firstName}
+                                        position={{lat: contact.lat, lng: contact.lng}}/>
+                                </div>
+                            )}
+                        </GoogleMap>
+                    </LoadScript>
 
-                    <p>{contact.street} {contact.streetnumber}</p>
-                    <p>{contact.zip} {contact.city}</p>
-                    <p>{contact.state} {contact.country}</p>
+                    {contacts.map(contact =>
+                        <div>
+                            <h4>{contact.firstName} {contact.lastName} {}
+                                <Link to='/editContact' onClick={() => setEditContact(contact)}>
+                                    <FaEdit
+                                        style={{color: 'black', cursor: 'pointer'}}
+                                    />
+                                </Link>
+                            </h4>
+
+                            <p>{contact.street} {contact.streetnumber}</p>
+                            <p>{contact.zip} {contact.city}</p>
+                            <p>{contact.state} {contact.country}</p>
+                        </div>
+                    )}
+                    <button onClick={filterMyContacts} className='btn btn-sm btn-info'>My Contacts</button>
+                    <button onClick={filterAllContacts} className='btn btn-sm btn-info'>All Contacts</button>
+
                 </div>
-            )}
-            <button onClick={filterMyContacts} className='btn btn-sm btn-info'>My Contacts</button>
-            <button onClick={filterAllContacts} className='btn btn-sm btn-info'>All Contacts</button>
-
-{/*            <div>
-                {contacts.filter(contact => contact.owner.includes('admina')).map(filteredContact => (
-
-                    <div>
-                        <h4>{filteredContact.firstName} {filteredContact.lastName} {}
-                            <Link to='/editContact'  onClick ={() => setEditContact(filteredContact)} >
-                                <FaEdit
-                                    style={{color: 'black', cursor: 'pointer'}}
-                                />
-                            </Link>
-                        </h4>
-                    </div>
-                ))}
-            </div>*/}
-
+                :
+                <h1> Sorry, you are not logged in</h1>
+            }
         </div>
     )
 }
