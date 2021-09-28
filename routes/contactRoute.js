@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const Contact = require('../models/contactModel')
+const {response} = require("express");
+const ObjectId = require("mongoose").ObjectId
 
 router.route('/addContact').post((req, res) => {
     const firstName = req.body.firstName
@@ -28,9 +30,11 @@ router.route('/addContact').post((req, res) => {
     newContact.save()
 })
 
+
+
 router.route('/contacts').get((req, res) => {
     Contact.find()
-            .then(foundContacts => res.json(foundContacts))
+        .then(foundContacts => res.json(foundContacts))
 })
 
 module.exports = router
